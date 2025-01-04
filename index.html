@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+  <title>Signature Pad</title>
 </head>
 <body>
-  <canvas id="signatureCanvas" style="border:1px solid #000; width:400px; height:200px;"></canvas>
+  <canvas id="signatureCanvas" style="border: 1px solid #000; width: 400px; height: 200px;"></canvas>
   <button id="clearSignature">Effacer</button>
   <button id="saveSignature">Enregistrer la signature</button>
 
@@ -17,16 +20,16 @@
       signaturePad.clear();
     });
 
-    // Enregistrer la signature et la transmettre à Appsmith via FilePicker
+    // Enregistrer la signature et transmettre à Appsmith
     document.getElementById("saveSignature").addEventListener("click", () => {
       if (!signaturePad.isEmpty()) {
         const signatureDataURL = signaturePad.toDataURL("image/png");
 
-        // Créer un lien de téléchargement
-        const link = document.createElement("a");
-        link.href = signatureDataURL;
-        link.download = "signature.png";
-        link.click();
+        // Envoi de la signature via postMessage
+        parent.postMessage(
+          { type: "signatureCaptured", data: signatureDataURL },
+          "*"
+        );
       } else {
         alert("Veuillez dessiner une signature avant de l'enregistrer.");
       }
