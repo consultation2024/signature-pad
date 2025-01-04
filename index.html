@@ -5,23 +5,30 @@
 </head>
 <body>
   <canvas id="signatureCanvas" style="border:1px solid #000; width:400px; height:200px;"></canvas>
-  <button id="saveSignature">Télécharger la signature</button>
+  <button id="clearSignature">Effacer</button>
+  <button id="saveSignature">Enregistrer la signature</button>
 
   <script>
     const canvas = document.getElementById("signatureCanvas");
     const signaturePad = new SignaturePad(canvas);
 
+    // Effacer la signature
+    document.getElementById("clearSignature").addEventListener("click", () => {
+      signaturePad.clear();
+    });
+
+    // Enregistrer la signature et la transmettre à Appsmith via FilePicker
     document.getElementById("saveSignature").addEventListener("click", () => {
       if (!signaturePad.isEmpty()) {
         const signatureDataURL = signaturePad.toDataURL("image/png");
 
-        // Crée un lien pour télécharger l'image directement
-        const downloadLink = document.createElement("a");
-        downloadLink.href = signatureDataURL;
-        downloadLink.download = "signature.png";
-        downloadLink.click();
+        // Créer un lien de téléchargement
+        const link = document.createElement("a");
+        link.href = signatureDataURL;
+        link.download = "signature.png";
+        link.click();
       } else {
-        alert("Veuillez dessiner une signature avant de la télécharger.");
+        alert("Veuillez dessiner une signature avant de l'enregistrer.");
       }
     });
   </script>
