@@ -25,7 +25,7 @@
       if (!signaturePad.isEmpty()) {
         const signatureDataURL = signaturePad.toDataURL("image/png");
 
-        // Envoi direct à Appsmith API
+        // Envoyer directement à l'API Appsmith
         fetch("https://app.appsmith.com/api/v1/actions/trigger", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
