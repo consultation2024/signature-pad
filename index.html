@@ -15,12 +15,9 @@
       if (!signaturePad.isEmpty()) {
         const signatureBase64 = signaturePad.toDataURL("image/png");
 
-        // Envoyer la signature à Appsmith via un événement personnalisé
+        // Transmettre la signature à Appsmith via postMessage
         parent.postMessage(
-          {
-            type: "SIGNATURE_CAPTURED",
-            data: signatureBase64,
-          },
+          { type: "SIGNATURE_CAPTURED", data: signatureBase64 },
           "*"
         );
       } else {
