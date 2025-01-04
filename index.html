@@ -30,7 +30,17 @@
     document.getElementById("save").addEventListener("click", () => {
       if (!signaturePad.isEmpty()) {
         const signatureData = signaturePad.toDataURL("image/png");
-        window.parent.postMessage({ signature: signatureData }, "*");
+
+        // Envoyer la signature à un endpoint Appsmith
+        fetch("https://votre-appsmith.com/api/v1/actions/trigger", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            signature: signatureData,
+          }),
+        })
+          .then(() => alert("Signature envoyée !"))
+          .catch((error) => console.error("Erreur :", error));
       } else {
         alert("Veuillez dessiner une signature avant de l'enregistrer.");
       }
