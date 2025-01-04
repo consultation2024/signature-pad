@@ -20,17 +20,18 @@
       signaturePad.clear();
     });
 
-    // Enregistrer la signature via une requête API
+    // Enregistrer la signature
     document.getElementById("saveSignature").addEventListener("click", () => {
       if (!signaturePad.isEmpty()) {
         const signatureDataURL = signaturePad.toDataURL("image/png");
 
-        // Envoyer directement à l'API Appsmith
-        fetch("https://app.appsmith.com/api/v1/actions/trigger", {
+        // Appel API pour stocker les données dans Appsmith
+        fetch("https://app.appsmith.com/api/v1/storeValue", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            signature: signatureDataURL,
+            key: "signatureData",
+            value: signatureDataURL,
           }),
         })
           .then((response) => {
