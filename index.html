@@ -9,7 +9,7 @@
 <body>
   <canvas id="signatureCanvas" style="border: 1px solid #000; width: 400px; height: 200px;"></canvas>
   <button id="clearSignature">Effacer</button>
-  <button id="saveSignature">Télécharger la signature</button>
+  <button id="saveSignature">Enregistrer la signature</button>
 
   <script>
     const canvas = document.getElementById("signatureCanvas");
@@ -20,18 +20,27 @@
       signaturePad.clear();
     });
 
-    // Télécharger la signature
+    // Enregistrer la signature
     document.getElementById("saveSignature").addEventListener("click", () => {
       if (!signaturePad.isEmpty()) {
         const signatureDataURL = signaturePad.toDataURL("image/png");
 
-        // Créer un lien de téléchargement
-        const link = document.createElement("a");
-        link.href = signatureDataURL;
-        link.download = "signature.png";
-        link.click();
+        // Envoyer directement l'image à Appsmith via l'API storeValue
+        fetch("https://app.appsmith.com/api/v1/storeValue", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ key: "signatureData", value: signatureDataURL }),
+        })
+          .then((response) => {
+            if (response.ok) {
+              alert("Signature envoyée avec succès !");
+            } else {
+              alert("Erreur lors de l'envoi de la signature.");
+            }
+          })
+          .catch((error) => console.error("Erreur :", error));
       } else {
-        alert("Veuillez dessiner une signature avant de la télécharger.");
+        alert("Veuillez dessiner une signature avant de l'enregistrer.");
       }
     });
   </script>
