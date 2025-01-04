@@ -5,7 +5,7 @@
 </head>
 <body>
   <canvas id="signatureCanvas" style="border:1px solid #000; width:400px; height:200px;"></canvas>
-  <button id="saveSignature">Enregistrer la signature</button>
+  <button id="saveSignature">Enregistrer</button>
 
   <script>
     const canvas = document.getElementById("signatureCanvas");
@@ -15,26 +15,14 @@
       if (!signaturePad.isEmpty()) {
         const signatureDataURL = signaturePad.toDataURL("image/png");
 
-        // Envoyer la signature directement à l'API Appsmith
-        fetch("https://app.appsmith.com/api/v1/store", {
+        // Replace 'SaveSignatureAPI' with your Appsmith API endpoint
+        fetch("https://app.appsmith.com/api/v1/datasources/<your_api_id>/execute", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            key: "signatureData",
-            value: signatureDataURL,
-          }),
+          body: JSON.stringify({ signature: signatureDataURL }),
         })
-          .then((response) => {
-            if (response.ok) {
-              alert("Signature envoyée avec succès !");
-            } else {
-              alert("Erreur lors de l'envoi de la signature.");
-            }
-          })
-          .catch((error) => {
-            console.error("Erreur lors de l'envoi :", error);
-            alert("Une erreur s'est produite.");
-          });
+          .then(() => alert("Signature envoyée avec succès !"))
+          .catch(() => alert("Erreur lors de l'envoi de la signature."));
       } else {
         alert("Veuillez dessiner une signature avant de l'enregistrer.");
       }
