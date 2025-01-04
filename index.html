@@ -15,14 +15,26 @@
       if (!signaturePad.isEmpty()) {
         const signatureDataURL = signaturePad.toDataURL("image/png");
 
-        // Envoyer directement dans Appsmith via un trigger
-        fetch("{{appsmith.store.signatureEndpoint}}", {
+        // Envoyer la signature directement à l'API Appsmith
+        fetch("https://app.appsmith.com/api/v1/store", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ signature: signatureDataURL }),
+          body: JSON.stringify({
+            key: "signatureData",
+            value: signatureDataURL,
+          }),
         })
-          .then(() => alert("Signature envoyée avec succès !"))
-          .catch((error) => alert("Erreur lors de l'envoi de la signature."));
+          .then((response) => {
+            if (response.ok) {
+              alert("Signature envoyée avec succès !");
+            } else {
+              alert("Erreur lors de l'envoi de la signature.");
+            }
+          })
+          .catch((error) => {
+            console.error("Erreur lors de l'envoi :", error);
+            alert("Une erreur s'est produite.");
+          });
       } else {
         alert("Veuillez dessiner une signature avant de l'enregistrer.");
       }
